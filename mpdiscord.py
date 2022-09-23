@@ -24,15 +24,15 @@ while True:
         if "albumartist" not in current_song:
             current_song["albumartist"] = current_song["artist"]
 
-        details = f"{current_song['track']} / {current_song['title']} | {int(status['audio'].split(':')[0])/1000}kHz@{status['audio'].split(':')[1]}bit"
-        state = f"on {current_song['album']} by {current_song['albumartist']}"
+        presence = {
+            "details": f"{current_song['track']}: {current_song['title']} ({status['audio'].split(':')[1]}bit@{int(status['audio'].split(':')[0])/1000}kHz, {status['bitrate']}kbps {current_song['file'].split('.')[-1]})",
+            "state": f"on {current_song['albumartist']} - {current_song['album']}",
+            "large_image": "0"
+        }
 
-        print(f"update: details={details!r} state={state!r}")
+        print(f"update: {' '.join([f'{p[0]}={p[1]!r}' for p in presence.items()])}")
 
-        rpc.update(
-            details=details,
-            state=state
-        )
+        rpc.update(**presence)
     else:
         print("clear")
         rpc.clear()
