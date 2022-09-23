@@ -25,8 +25,8 @@ while True:
             current_song["albumartist"] = current_song["artist"]
 
         presence = {
-            "details": f"{current_song['track']}: {current_song['title']} ({status['audio'].split(':')[1]}bit@{int(status['audio'].split(':')[0])/1000}kHz, {status['bitrate']}kbps {current_song['file'].split('.')[-1]})",
-            "state": f"on {current_song['albumartist']} - {current_song['album']}",
+            "details": f"{current_song.get('track', '?')}: {current_song.get('title', '?')} ({status['audio'].split(':')[1]}bit@{int(status['audio'].split(':')[0])/1000}kHz, {current_song['file'].split('.')[-1]})",
+            "state": f"on {current_song.get('albumartist', '?')} - {current_song.get('album', '?')}",
             "large_image": "0"
         }
 
