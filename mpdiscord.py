@@ -15,6 +15,7 @@ else:
     client.connect(config["server"][0], config["server"][1])
 print("connected!")
 
+connected = False
 while True:
     status = client.status()
     current_song = client.currentsong()
@@ -30,18 +31,22 @@ while True:
         }
 
         print(f"update: {' '.join([f'{p[0]}={p[1]!r}' for p in presence.items()])}")
-        print("connecting to rpc...")
-        try: rpc.connect()
-        except ConnectionRefusedError:
-            print("connecting failed")
-            client.idle("player")
-            continue
 
-        print("...ok")
+        if not connected:
+            print("connecting to rpc...")
+            try: rpc.connect()
+            except ConnectionRefusedError:
+                print("connecting failed")
+                client.idle("player")
+                continue
+            connected = True
+
+        print("updating presence")
         rpc.update(**presence)
     else:
         print("clear, disconnecting")
         rpc.clear()
         rpc.close()
+        connected = False
 
     client.idle("player")
