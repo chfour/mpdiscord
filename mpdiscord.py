@@ -5,7 +5,6 @@ with open("config.json", "rt") as f:
 
 print(f"using id {config['id']}...")
 rpc = pypresence.Presence(config["id"])
-rpc.connect()
 
 print(f"connecting to {config['server']}...")
 client = mpd.MPDClient()
@@ -31,10 +30,18 @@ while True:
         }
 
         print(f"update: {' '.join([f'{p[0]}={p[1]!r}' for p in presence.items()])}")
+        print("connecting to rpc...")
+        try: rpc.connect()
+        except ConnectionRefusedError:
+            print("connecting failed")
+            client.idle("player")
+            continue
 
+        print("...ok")
         rpc.update(**presence)
     else:
-        print("clear")
+        print("clear, disconnecting")
         rpc.clear()
+        rpc.close()
 
     client.idle("player")
