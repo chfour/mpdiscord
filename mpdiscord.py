@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import pypresence, time, json, mpd
 
 with open("config.json", "rt") as f:
