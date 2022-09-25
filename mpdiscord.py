@@ -23,7 +23,7 @@ while True:
 
     if status["state"] == "play":
         if "albumartist" not in current_song:
-            current_song["albumartist"] = current_song["artist"]
+            current_song["albumartist"] = current_song.get("artist", "?")
 
         presence = {
             "details": f"{current_song.get('track', '?')}: {current_song.get('title', '?')} ({status['audio'].split(':')[1]}bit@{int(status['audio'].split(':')[0])/1000}kHz, {current_song['file'].split('.')[-1]})",
